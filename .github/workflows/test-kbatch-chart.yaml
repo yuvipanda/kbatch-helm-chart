@@ -3,15 +3,15 @@
 #
 # NOTE: Changes to this name must be followed by updates to the README.me
 #       badges.
-name: Test dask chart
+name: Test kbatch chart
 
 on:
   push:
-    paths: ["dask/**", "chartpress.yaml", "**/test-dask-chart.yml", "ci/common"]
+    paths: ["kbatch/**", "chartpress.yaml", "**/test-kbatch-chart.yml", "ci/common"]
     branches-ignore:
       - "upgrade-**"
   pull_request:
-    paths: ["dask/**", "chartpress.yaml", "**/test-dask-chart.yml", "ci/common"]
+    paths: ["kbatch/**", "chartpress.yaml", "**/test-kbatch-chart.yml", "ci/common"]
   workflow_dispatch:
 
 defaults:
@@ -44,11 +44,11 @@ jobs:
 
       - name: Lint chart's templates
         run: |
-          helm lint ./dask --strict --values dask/dev-values.yaml
+          helm lint ./kbatch --strict --values kbatch/dev-values.yaml
 
       - name: Validate chart's templates can render
         run: |
-          helm template ./dask --values dask/dev-values.yaml 1>/dev/null
+          helm template ./kbatch --values kbatch/dev-values.yaml 1>/dev/null
 
       # Starts a k8s cluster with NetworkPolicy enforcement and installs kubectl
       #
@@ -62,11 +62,11 @@ jobs:
 
       - name: Validate charts' rendered templates are valid k8s resources
         run: |
-          helm template ./dask --validate --values dask/dev-values.yaml 1>/dev/null
+          helm template ./kbatch --validate --values kbatch/dev-values.yaml 1>/dev/null
 
       - name: Install chart and await readiness
         run: |
-          helm install dask ./dask --values dask/dev-values.yaml
+          helm install kbatch ./kbatch --values kbatch/dev-values.yaml
 
           . ci/common
           full_namespace_await

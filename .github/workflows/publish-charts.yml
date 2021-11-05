@@ -31,6 +31,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           charts_dir: "."
-          charts_url: https://helm.dask.org/
+          charts_url: https://kbatch-dev.github.io/helm-chart
           linting: "off"
           chart_version: ${{ steps.get_version.outputs.VERSION }}
