@@ -27,12 +27,32 @@ spec:
       serviceAccountName: {{ include "kbatch-proxy.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        {{- if .Values.app.extraFiles }}
+        - name: files
+          secret:
+            secretName: {{ include "kbatch-proxy.fullname" . }}
+            items:
+              {{- range $file_key, $file_details := .Values.app.extraFiles }}
+              - key: {{ $file_key | quote }}
+                path: {{ $file_key | quote }}
+                {{- with $file_details.mode }}
+                mode: {{ . }}
+                {{- end }}
+              {{- end }}
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            {{- range $file_key, $file_details := .Values.app.extraFiles }}
+            - mountPath: {{ $file_details.mountPath }}
+              subPath: {{ $file_key | quote }}
+              name: files
+            {{- end }}
           ports:
             - name: http
               containerPort: 80

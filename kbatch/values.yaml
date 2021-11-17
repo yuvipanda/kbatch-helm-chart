@@ -5,6 +5,7 @@ app:
   jupyterhub_api_token: ""
   jupyterhub_service_prefix: ""
   extra_env: {}
+  extraFiles: {}
 
 image:
   repository: ghcr.io/kbatch-dev/kbatch-proxy
