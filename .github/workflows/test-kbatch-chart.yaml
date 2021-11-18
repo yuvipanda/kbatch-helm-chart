@@ -62,11 +62,11 @@ jobs:
 
       - name: Validate charts' rendered templates are valid k8s resources
         run: |
-          helm template ./kbatch --validate --values kbatch/dev-values.yaml 1>/dev/null
+          helm template ./kbatch --validate --values kbatch/values.yaml 1>/dev/null
 
       - name: Install chart and await readiness
         run: |
-          helm install kbatch ./kbatch --values kbatch/dev-values.yaml
+          helm install kbatch ./kbatch --values kbatch/values.yaml
 
           . ci/common
           full_namespace_await
