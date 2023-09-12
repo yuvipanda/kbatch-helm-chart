@@ -24,7 +24,8 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: |
+          echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Publish Helm charts
         uses: stefanprodan/helm-gh-pages@master
@@ -33,4 +34,4 @@ jobs:
           charts_dir: "."
           charts_url: https://kbatch-dev.github.io/helm-chart
           linting: "off"
-          chart_version: ${{ steps.get_version.outputs.VERSION }}
+          chart_version: ${{ env.VERSION }}
